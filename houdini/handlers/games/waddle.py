@@ -1,7 +1,7 @@
 from houdini import handlers
 from houdini.data.room import Room
 from houdini.handlers import XTPacket
-from houdini.handlers.play.navigation import handle_join_player_room, handle_join_room
+from houdini.handlers.play.navigation import handle_join_player_room, handle_join_room, handle_refresh_room
 
 
 @handlers.handler(XTPacket('gw', ext='z'))
@@ -39,6 +39,12 @@ async def handle_join_room_waddle(p):
     if p.waddle:
         await p.waddle.remove_penguin(p)
 
+
+@handlers.handler(XTPacket('j', 'grs'), after=handle_refresh_room)
+async def handle_refresh_room_waddle(p):
+    if p.waddle:
+        await p.waddle.remove_penguin(p)
+        
 
 @handlers.handler(XTPacket('j', 'jp'), after=handle_join_player_room)
 async def handle_join_player_room_waddle(p):
